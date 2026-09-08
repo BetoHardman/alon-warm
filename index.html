@@ -731,19 +731,19 @@ footer{position:relative;overflow:hidden;border-radius:2rem 2rem 0 0;background:
     <div id="modalForm">
       <div class="modal-head"><span class="k">Iniciar um projeto</span><h2>Conta pra gente o que você está criando.</h2></div>
       <form class="mform" id="reqForm">
-        <div class="mfield"><label>Nome</label><input type="text" required placeholder="Seu nome"></div>
-        <div class="mfield"><label>E-mail</label><input type="email" required placeholder="voce@empresa.com"></div>
-        <div class="mfield"><label>Projeto</label><textarea rows="4" required placeholder="Algumas palavras sobre seu projeto, prazo e orçamento."></textarea></div>
+        <div class="mfield"><label>Nome</label><input id="fNome" type="text" required placeholder="Seu nome"></div>
+        <div class="mfield"><label>E-mail ou telefone</label><input id="fContato" type="text" required placeholder="Para eu te responder"></div>
+        <div class="mfield"><label>Projeto</label><textarea id="fProjeto" rows="4" required placeholder="Tipo de negócio, o que precisa (site, landing, IA) e prazo."></textarea></div>
         <div class="mbottom">
-          <span class="note">Respondemos em até 1 dia útil.</span>
-          <button class="pill dark arr" type="submit"><span style="padding-left:.25rem" id="sendLbl">Enviar pedido</span><span class="badge"><svg class="svgi arrUR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+          <span class="note">Vai direto para o meu WhatsApp.</span>
+          <button class="pill dark arr" type="submit"><span style="padding-left:.25rem" id="sendLbl">Enviar no WhatsApp</span><span class="badge"><svg class="svgi arrUR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
         </div>
       </form>
     </div>
     <div id="modalOk" class="msuccess" style="display:none">
       <div class="badge"><svg class="svgi" viewBox="0 0 48 48" fill="currentColor"><path d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></svg></div>
-      <h2>Pedido recebido</h2>
-      <p>Obrigada pelo contato — retornamos em até 1 dia útil.</p>
+      <h2>Quase lá!</h2>
+      <p>Abri o WhatsApp com a sua mensagem pronta — é só tocar em enviar que eu recebo na hora.</p><p style="font-size:.82rem;opacity:.7">Não abriu? Chame direto: <a href="https://wa.me/5561995572995" target="_blank" rel="noopener" style="color:var(--accent-from);font-weight:600">(61) 99557-2995</a></p>
       <button class="pill dark txt" data-modal-close>Fechar</button>
     </div>
   </div>
@@ -921,7 +921,17 @@ function closeModal(){modal.classList.remove('on');startScroll();setTimeout(()=>
 document.querySelectorAll('[data-modal]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();closeMenu();openModal()}));
 document.querySelectorAll('[data-modal-close]').forEach(b=>b.onclick=closeModal);
 modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
-document.getElementById('reqForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('sendLbl').textContent='Enviando…';setTimeout(()=>{mForm.style.display='none';mOk.style.display='flex'},600)});
+document.getElementById('reqForm').addEventListener('submit',e=>{e.preventDefault();
+ const lbl=document.getElementById('sendLbl');
+ const nome=(document.getElementById('fNome').value||'').trim();
+ const cont=(document.getElementById('fContato').value||'').trim();
+ const proj=(document.getElementById('fProjeto').value||'').trim();
+ const msg='Ola, Alon Warm! Vim pelo site.\n\n*Nome:* '+nome+'\n*Contato:* '+cont+'\n*Projeto:* '+proj;
+ const url='https://wa.me/5561995572995?text='+encodeURIComponent(msg);
+ lbl.textContent='Abrindo WhatsApp…';
+ window.open(url,'_blank','noopener');
+ setTimeout(()=>{mForm.style.display='none';mOk.style.display='flex';lbl.textContent='Enviar pedido';},700);
+});
 
 /* ===== scroll routing / esc ===== */
 document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollToId(b.getAttribute('data-scroll'))));
